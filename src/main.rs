@@ -1,6 +1,7 @@
 use colored::*;
 use std::string::ToString;
-use sysinfo::{System, SystemExt, RefreshKind, ProcessorExt};
+use sysinfo::{System, RefreshKind, CpuRefreshKind};
+use whoami::fallible;
 
 const FERRIS_ART: &[&str] = &[
     "                                              ",
@@ -66,25 +67,28 @@ fn main() {
         art = false;
     }
 
-    let mut sys = System::new_with_specifics(RefreshKind::new().with_cpu());
+    let mut sys = System::new_with_specifics(RefreshKind::new().with_cpu(CpuRefreshKind::everything()));
     sys.refresh_all();
-    let kernel = sys.kernel_version().unwrap_or_else(|| "Unknown".into());
+    let kernel = System::kernel_version().unwrap_or_else(|| "Unknown".into());
     let total_ram = sys.total_memory();
     let used_ram = sys.used_memory();
-    let cpu = sys.processors()[0].brand();
+    let cpu = sys.cpus()[0].brand();
 
     let rustc_ver = get_ver("rustc  -V");
     let cargo_ver = get_ver("cargo  -V");
     let rustup_ver = get_ver("rustup -V");
     let cargo_crates = get_cargo_crates();
 
+    let username = fallible::username().unwrap_or("unknown".to_string());
+    let hostname = fallible::hostname().unwrap_or("unknown".to_string());
+
     let userinfo = format!(
         "{}{}{}",
-        whoami::username().bright_red().bold(),
+        username.bright_red().bold(),
         "@".bold(),
-        whoami::hostname().bright_red().bold()
+        hostname.bright_red().bold()
     );
-    let splitline = "═".repeat(whoami::username().len() + whoami::hostname().len() + 1);
+    let splitline = "═".repeat(username.len() + hostname.len() + 1);
     let rustc_ver = format!("{}{}", "rustc  ver: ".bright_red(), rustc_ver);
     let rustup_ver = format!("{}{}", "rustup ver: ".bright_red(), rustup_ver);
     let cargo_ver = format!("{}{}", "cargo  ver: ".bright_red(), cargo_ver);
