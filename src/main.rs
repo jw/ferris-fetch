@@ -2,6 +2,7 @@ use colored::*;
 use std::string::ToString;
 use sysinfo::{System, RefreshKind, CpuRefreshKind};
 use whoami::fallible;
+use humansize::{make_format, DECIMAL};
 
 const FERRIS_ART: &[&str] = &[
     "                                              ",
@@ -96,12 +97,14 @@ fn main() {
     let os = format!("{}{}", "     os: ".bright_red(), whoami::distro());
     let kernel = format!("{}{}", " kernel: ".bright_red(), kernel);
     let cpu = format!("{}{}", "    cpu: ".bright_red(), cpu);
+
+    let formatter = make_format(DECIMAL);
+
     let ram = format!(
-        "{}{} » {}{}",
+        "{}{} » {}",
         "    ram: ".bright_red(),
-        used_ram,
-        total_ram,
-        " MB"
+        formatter(used_ram),
+        formatter(total_ram)
     );
 
     let bright_colors = format!(
