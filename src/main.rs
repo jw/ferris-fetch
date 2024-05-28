@@ -51,7 +51,7 @@ fn get_cargo_crates() -> usize {
 fn render(art: bool, info: &[String]) {
     if art {
         for (ferris_line, info_line) in FERRIS_ART.iter().zip(info) {
-            println!("{}   {}", ferris_line.red(), info_line);
+            println!("{}   {}", ferris_line.bright_red(), info_line);
         }
     } else {
         for line in info {
@@ -89,16 +89,16 @@ fn main() {
         hostname.bright_red().bold()
     );
     let splitline = "═".repeat(username.len() + hostname.len() + 1);
-    let rustc_ver = format!("{}{}", "rustc  ver: ".bright_red(), rustc_ver);
-    let rustup_ver = format!("{}{}", "rustup ver: ".bright_red(), rustup_ver);
-    let cargo_ver = format!("{}{}", "cargo  ver: ".bright_red(), cargo_ver);
-    let cargo_crates = format!("{}{}", "cargo crates: ".bright_red(), cargo_crates);
-    let os = format!("{}{}", "os: ".bright_red(), whoami::distro());
-    let kernel = format!("{}{}", "kernel: ".bright_red(), kernel);
-    let cpu = format!("{}{}", "cpu: ".bright_red(), cpu);
+    let rustc_ver = format!("{}{}", "  rustc: ".bright_red(), rustc_ver);
+    let rustup_ver = format!("{}{}", " rustup: ".bright_red(), rustup_ver);
+    let cargo_ver = format!("{}{}", "  cargo: ".bright_red(), cargo_ver);
+    let cargo_crates = format!("{}{}", " crates: ".bright_red(), cargo_crates);
+    let os = format!("{}{}", "     os: ".bright_red(), whoami::distro());
+    let kernel = format!("{}{}", " kernel: ".bright_red(), kernel);
+    let cpu = format!("{}{}", "    cpu: ".bright_red(), cpu);
     let ram = format!(
         "{}{} » {}{}",
-        "ram: ".bright_red(),
+        "    ram: ".bright_red(),
         used_ram,
         total_ram,
         " MB"
@@ -130,7 +130,6 @@ fn main() {
     render(
         art,
         &[
-            "".to_string(),
             "".to_string(),
             userinfo,
             splitline,
